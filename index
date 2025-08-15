@@ -1,0 +1,27 @@
+<script>
+(function(){
+    // RSS feed URL
+    var feedUrl = "https://globalsell.site/feeds/posts/default?alt=json";
+
+    // আপনার IndexNow API key
+    var indexNowKey = "9f4a2b1c8d6e4f7b9c0a2d3e5f6b8c1d"; // Example key, আপনার key ব্যবহার করুন
+
+    fetch(feedUrl)
+    .then(r => r.json())
+    .then(data => {
+        var postUrl = data.feed.entry[0].link.find(l => l.rel === "alternate").href;
+
+        // Google Ping
+        fetch("https://www.google.com/ping?sitemap=" + encodeURIComponent(postUrl));
+
+        // Bing IndexNow
+        fetch("https://api.indexnow.org/indexnow?url=" + encodeURIComponent(postUrl) + "&key=" + indexNowKey);
+
+        // Yandex Ping
+        fetch("https://yandex.com/ping?sitemap=" + encodeURIComponent(postUrl));
+
+        console.log("Index requests sent for: " + postUrl);
+    })
+    .catch(err => console.error("Error fetching feed:", err));
+})();
+</script>
